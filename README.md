@@ -1,4 +1,4 @@
-= Terraform AWS Session Manager
+# Terraform AWS Session Manager
 
 A Terraform module to setup [AWS Systems Manager Session Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html).  
 
@@ -41,7 +41,6 @@ This module does not create any IAM policies for access to session manager.  To 
 Below is a list of this modules input values:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
-
 | bucket\_name | Name of S3 bucket to store session logs | `string` | | yes |
 | log\_archive\_days | Number of days to wait before archiving to Glacier | `number` | `30` | no |
 | log\_expire\_days | Number of days to wait before deleting session logs | `number` | `365` | no |
@@ -77,7 +76,7 @@ Below is a list of this modules input values:
 | vpc_endpoint_kms | ["vpce-07ddc11beac1d4a3f"] | VPC Endpoint for KMS |
 
 
-== SSM Usage Example
+## SSM Usage Example
 
 * Launch an instance using the ssm_profile created by Terraform
 * Install the session-manager-plugin and start a session
