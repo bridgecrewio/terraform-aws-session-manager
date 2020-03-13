@@ -52,9 +52,9 @@ Below is a list of this modules input values:
 | cloudwatch\_log\_group\_name | Name of the CloudWatch Log Group for storing SSM Session Logs | `string` | `/ssm/session-logs` | no |
 | tags | A map of tags to add to all resources | `map(string)` | `{}` | no |
 | vpc\_id | VPC ID to deploy endpoints to | `string` | `null` | no |
-| enable\_log\_to\_s3 | Enable Session Manager to Log to S3 | `true` | no |
-| enable\_log\_to\_cloudwatch | Enable Session Manager to Log to CloudWatch Logs | `true` | no |
-| vpc\_endpoints\_enabled | Create VPC Endpoints | `false` | no |
+| enable\_log\_to\_s3 | Enable Session Manager to Log to S3 | `bool` | `true` | no |
+| enable\_log\_to\_cloudwatch | Enable Session Manager to Log to CloudWatch Logs | `bool` | `true` | no |
+| vpc\_endpoints\_enabled | Create VPC Endpoints | `bool` | `false` | no |
 
 
 
