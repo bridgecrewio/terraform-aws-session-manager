@@ -9,7 +9,7 @@ data "aws_subnet_ids" "selected" {
 }
 
 locals {                                                            
-  subnet_ids_string = join(",", data.aws_subnet_ids.selected[0].ids)
+  subnet_ids_string = var.vpc_endpoints_enabled ? join(",", data.aws_subnet_ids.selected[0].ids) : ""
   subnet_ids_list = split(",", local.subnet_ids_string)             
 }               
 
