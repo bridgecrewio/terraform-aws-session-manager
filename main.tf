@@ -172,7 +172,7 @@ DOC
 
 # Create EC2 Instance Role 
 resource "aws_iam_role" "ssm_role" {
-  name             = "ssm_role"
+  name             = var.iam_role_name
   path             = "/"
   tags             = var.tags
 

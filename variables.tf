@@ -80,3 +80,8 @@ variable "vpc_endpoints_enabled" {
   default     = false
 }
 
+variable "iam_role_name" {
+  description = "Name for IAM role"
+  type = string
+  default = "ssm_iam_role"
+}
