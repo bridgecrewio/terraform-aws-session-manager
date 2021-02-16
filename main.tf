@@ -127,7 +127,7 @@ data "aws_iam_policy_document" "kms_access" {
 
 
 resource "aws_kms_key" "ssmkey" {
-  description             = "jozwiak key"
+  description             = "SSM Key"
   deletion_window_in_days = var.kms_key_deletion_window
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.kms_access.json
