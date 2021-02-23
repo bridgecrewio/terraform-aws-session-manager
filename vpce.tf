@@ -1,6 +1,6 @@
 data "aws_vpc" "selected" {
   count               = var.vpc_endpoints_enabled ? 1 : 0
-  id                  = "${var.vpc_id}"
+  id                  = var.vpc_id
 }
 
 data "aws_subnet_ids" "selected" {
@@ -30,7 +30,7 @@ resource "aws_security_group" "ssm_sg" {
     from_port         = 443
     to_port           = 443
     protocol          = "tcp"
-    cidr_blocks       = [ "${data.aws_vpc.selected[0].cidr_block}" ]
+    cidr_blocks       = [ data.aws_vpc.selected[0].cidr_block ]
   }
 
   egress {
@@ -52,7 +52,7 @@ resource "aws_vpc_endpoint" "ssm" {
   vpc_endpoint_type   = "Interface"
 
   security_group_ids  = [
-    "${aws_security_group.ssm_sg[0].id}",
+    aws_security_group.ssm_sg[0].id
   ]
 
   private_dns_enabled = true
@@ -67,7 +67,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
   vpc_endpoint_type   = "Interface"
 
   security_group_ids  = [
-    "${aws_security_group.ssm_sg[0].id}",
+    aws_security_group.ssm_sg[0].id,
   ]
 
   private_dns_enabled = true
@@ -82,7 +82,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
   vpc_endpoint_type   = "Interface"
 
   security_group_ids  = [
-    "${aws_security_group.ssm_sg[0].id}",
+    aws_security_group.ssm_sg[0].id,
   ]
 
   private_dns_enabled = true
@@ -120,7 +120,7 @@ resource "aws_vpc_endpoint" "logs" {
   vpc_endpoint_type   = "Interface"
 
   security_group_ids  = [
-    "${aws_security_group.ssm_sg[0].id}",
+    aws_security_group.ssm_sg[0].id
   ]
 
   private_dns_enabled = true
@@ -136,7 +136,7 @@ resource "aws_vpc_endpoint" "kms" {
   vpc_endpoint_type   = "Interface"
 
   security_group_ids  = [
-    "${aws_security_group.ssm_sg[0].id}",
+    aws_security_group.ssm_sg[0].id
   ]
 
   private_dns_enabled = true
