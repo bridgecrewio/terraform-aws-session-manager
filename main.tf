@@ -3,13 +3,13 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "aws_s3_bucket" "session_logs_bucket" {
-  bucket                  = var.bucket_name
-  acl                     = "private"
-  force_destroy           = true
-  tags                    = var.tags 
+  bucket        = var.bucket_name
+  acl           = "private"
+  force_destroy = true
+  tags          = var.tags
 
   versioning {
-    enabled               = true
+    enabled = true
   }
 
   server_side_encryption_configuration {
@@ -22,22 +22,22 @@ resource "aws_s3_bucket" "session_logs_bucket" {
   }
 
   lifecycle_rule {
-    id                    = "archive_after_X_days"
-    enabled               = true
+    id      = "archive_after_X_days"
+    enabled = true
 
     transition {
-      days                = var.log_archive_days
-      storage_class       = "GLACIER"
+      days          = var.log_archive_days
+      storage_class = "GLACIER"
     }
 
     expiration {
-      days                = var.log_expire_days
+      days = var.log_expire_days
     }
   }
 
   logging {
-    target_bucket         = aws_s3_bucket.access_log_bucket.id
-    target_prefix         = "log/"
+    target_bucket = aws_s3_bucket.access_log_bucket.id
+    target_prefix = "log/"
   }
 
 }
@@ -52,14 +52,14 @@ resource "aws_s3_bucket_public_access_block" "session_logs_bucket" {
 
 
 resource "aws_s3_bucket" "access_log_bucket" {
-  bucket                  = var.access_log_bucket_name
-  acl                     = "log-delivery-write"
-  force_destroy           = true
+  bucket        = var.access_log_bucket_name
+  acl           = "log-delivery-write"
+  force_destroy = true
 
-  tags                    = var.tags
+  tags = var.tags
 
   versioning {
-    enabled               = true
+    enabled = true
   }
 
   server_side_encryption_configuration {
@@ -72,11 +72,11 @@ resource "aws_s3_bucket" "access_log_bucket" {
   }
 
   lifecycle_rule {
-    id                    = "delete_after_X_days"
-    enabled               = true
+    id      = "delete_after_X_days"
+    enabled = true
 
     expiration {
-      days                = var.access_log_expire_days
+      days = var.access_log_expire_days
     }
   }
 }
@@ -93,7 +93,7 @@ data "aws_iam_policy_document" "kms_access" {
   statement {
     sid = "KMS Key Default"
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
     actions = [
@@ -107,7 +107,7 @@ data "aws_iam_policy_document" "kms_access" {
   statement {
     sid = "CloudWatchLogsEncryption"
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
     }
     actions = [
@@ -133,23 +133,23 @@ resource "aws_kms_key" "ssmkey" {
 }
 
 resource "aws_kms_alias" "ssmkey" {
-  name                    = var.kms_key_alias
-  target_key_id           = aws_kms_key.ssmkey.key_id
+  name          = var.kms_key_alias
+  target_key_id = aws_kms_key.ssmkey.key_id
 }
 
 resource "aws_cloudwatch_log_group" "session_manager_log_group" {
-  name                    = var.cloudwatch_log_group_name
-  retention_in_days       = var.cloudwatch_logs_retention
-  kms_key_id              = aws_kms_key.ssmkey.arn
+  name              = var.cloudwatch_log_group_name
+  retention_in_days = var.cloudwatch_logs_retention
+  kms_key_id        = aws_kms_key.ssmkey.arn
 
-  tags = var.tags 
+  tags = var.tags
 }
 
 resource "aws_ssm_document" "session_manager_prefs" {
-  name                    = "SSM-SessionManagerRunShell"
-  document_type           = "Session"
-  document_format         = "JSON"
-  tags                    = var.tags
+  name            = "SSM-SessionManagerRunShell"
+  document_type   = "Session"
+  document_format = "JSON"
+  tags            = var.tags
 
   content = <<DOC
 {
@@ -159,7 +159,7 @@ resource "aws_ssm_document" "session_manager_prefs" {
     "inputs": {
         "s3BucketName": "${var.enable_log_to_s3 ? aws_s3_bucket.session_logs_bucket.id : ""}",
         "s3EncryptionEnabled": ${var.enable_log_to_s3 ? "true" : "false"},
-        "cloudWatchLogGroupName": "${var.enable_log_to_cloudwatch ? var.cloudwatch_log_group_name : "" }",
+        "cloudWatchLogGroupName": "${var.enable_log_to_cloudwatch ? var.cloudwatch_log_group_name : ""}",
         "cloudWatchEncryptionEnabled": ${var.enable_log_to_cloudwatch ? "true" : "false"},
         "kmsKeyId": "${aws_kms_key.ssmkey.key_id}"
     }
@@ -167,14 +167,14 @@ resource "aws_ssm_document" "session_manager_prefs" {
 DOC
 }
 
-        #"kmsKeyId": "${aws_kms_key.ssmkey.key_id}",
-        #"kmsKeyId": "${aws_kms_key.ssmkey.arn}",
+#"kmsKeyId": "${aws_kms_key.ssmkey.key_id}",
+#"kmsKeyId": "${aws_kms_key.ssmkey.arn}",
 
 # Create EC2 Instance Role 
 resource "aws_iam_role" "ssm_role" {
-  name             = "ssm_role"
-  path             = "/"
-  tags             = var.tags
+  name = "ssm_role"
+  path = "/"
+  tags = var.tags
 
   assume_role_policy = <<EOF
 {
@@ -259,9 +259,9 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
 }
 
 resource "aws_iam_policy" "ssm_s3_cwl_access" {
-  name       = "ssm_s3_cwl_access"
-  path       = "/"
-  policy     = data.aws_iam_policy_document.ssm_s3_cwl_access.json
+  name   = "ssm_s3_cwl_access"
+  path   = "/"
+  policy = data.aws_iam_policy_document.ssm_s3_cwl_access.json
 }
 
 resource "aws_iam_role_policy_attachment" "SSM-role-policy-attach" {
@@ -275,7 +275,7 @@ resource "aws_iam_role_policy_attachment" "SSM-s3-cwl-policy-attach" {
 }
 
 resource "aws_iam_instance_profile" "ssm_profile" {
-  name       = "ssm_profile"
-  role       = aws_iam_role.ssm_role.name
+  name = "ssm_profile"
+  role = aws_iam_role.ssm_role.name
 }
 

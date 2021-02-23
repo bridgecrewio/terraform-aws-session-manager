@@ -27,7 +27,7 @@ variable "access_log_expire_days" {
 }
 
 variable "kms_key_deletion_window" {
-  description = "Waiting period for scheduled KMS Key deletion.  Can be 7-30 days." 
+  description = "Waiting period for scheduled KMS Key deletion.  Can be 7-30 days."
   type        = number
   default     = 7
 }
@@ -64,13 +64,13 @@ variable "vpc_id" {
 
 variable "enable_log_to_s3" {
   description = "Enable Session Manager to Log to S3"
-  type        = bool 
+  type        = bool
   default     = true
 }
 
 variable "enable_log_to_cloudwatch" {
   description = "Enable Session Manager to Log to CloudWatch Logs"
-  type        = bool 
+  type        = bool
   default     = true
 }
 

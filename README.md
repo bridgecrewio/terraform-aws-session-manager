@@ -6,10 +6,11 @@ This module creates the a SSM document to support encrypted session manager comm
 
 ## Usage
 
-Update version to the latest release here: https://github.com/bridgecrewio/terraform-aws-session-manager/releases
+Update version to the latest release here: <https://github.com/bridgecrewio/terraform-aws-session-manager/releases>
 
 Instances with Public IPs do not need VPC endpoints
-```
+
+```terraform
 module "ssm" {
   source                    = "bridgecrewio/session-manager/aws"
   version                   = "0.2.0"
@@ -21,7 +22,8 @@ module "ssm" {
 ```
 
 Private instances with VPC endpoints for S3 and CloudWatch logging
-```
+
+```terraform
 module "ssm" {
   source                    = "bridgecrewio/session-manager/aws"
   version                   = "0.2.0"
@@ -85,7 +87,7 @@ Below is a list of this modules input values:
 * Launch an instance using the ssm_profile created by Terraform
 * Install the session-manager-plugin and start a session
 
-```
+```bash
 cd /tmp
 curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/sessionmanager-bundle.zip" -o "sessionmanager-bundle.zip"
 unzip sessionmanager-bundle.zip
@@ -100,7 +102,5 @@ cd -
 aws ssm start-session --target <EC2 Instance ID>
 ```
 
-* Review session logs in your CloudWatch logs group 
-* Review session logs in your S3 bucket 
-
-
+* Review session logs in your CloudWatch logs group
+* Review session logs in your S3 bucket
