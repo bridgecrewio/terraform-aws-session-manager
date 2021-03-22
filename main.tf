@@ -191,7 +191,7 @@ DOC
 
 # Create EC2 Instance Role
 resource "aws_iam_role" "ssm_role" {
-  name        = "ssm_role"
+  name        = "ssm_role_${data.aws_region.current.name}"
   description = "Allows access to SSM resources"
   path        = "/"
   tags        = var.tags
@@ -276,7 +276,7 @@ data "aws_iam_policy_document" "ssm_s3_cwl_kms_access" {
 }
 
 resource "aws_iam_policy" "ssm_s3_cwl_kms_access" {
-  name        = "ssm_s3_cwl_kms_access"
+  name        = "ssm_s3_cwl_kms_access_${data.aws_region.current.name}"
   description = "Allows access to SSM resources"
   path        = "/"
   policy      = data.aws_iam_policy_document.ssm_s3_cwl_kms_access.json
@@ -293,7 +293,7 @@ resource "aws_iam_role_policy_attachment" "SSM-s3-cwl-kms-policy-attach" {
 }
 
 resource "aws_iam_instance_profile" "ssm_profile" {
-  name = "ssm_profile"
+  name = "ssm_profile_${data.aws_region.current.name}"
   role = aws_iam_role.ssm_role.name
 }
 
