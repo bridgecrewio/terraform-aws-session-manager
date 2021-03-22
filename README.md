@@ -99,9 +99,9 @@ Below is a list of this modules input values:
 | access\_log\_bucket\_name | my-session-access-logs | S3 bucket for S3 access logs |
 | cloudwatch\_log\_group\_arn | arn:aws:logs:us-west-2:123456789012:log-group:/ssm/session-logs:\* | CloudWatch Log group for session logs |
 | kms\_key\_arn | arn:aws:kms:us-west-2:123456789012:key/2320fbba-d4e5-420d-82d3-1a4d6b8605e8 | KMS Key Arn for Encrypting logs and session |
-| iam\_policy\_arn | arn:aws:iam::123456789012:policy/ssm\_s3\_cwl\_kms\_access | IAM Policy for EC2 instances |
-| iam\_role\_arn | arn:aws:iam::123456789012:role/ssm\_role | IAM Role for EC2 instances |
-| iam\_profile\_name | ssm\_profile | EC2 instance profile for SSM |
+| iam\_policy\_arn | arn:aws:iam::123456789012:policy/ssm\_s3\_cwl\_kms\_access\_us-east-1 | IAM Policy for EC2 instances |
+| iam\_role\_arn | arn:aws:iam::123456789012:role/ssm\_role\_us-east-1 | IAM Role for EC2 instances |
+| iam\_profile\_name | ssm\_profile\_us-east-1 | EC2 instance profile for SSM |
 | ssm\_security\_group | ["sg-05e4f4cf12db5a191"] | Security Group used to access VPC Endpoints |
 | vpc\_endpoint\_ssm | ["vpce-0cefc23e81d365733"] | VPC Endpoint for SSM |
 | vpc\_endpoint\_ec2messages | ["vpce-0f507468fb9b06b8b"] | VPC Endpoint for EC2 Messages |
