@@ -13,7 +13,7 @@ data "aws_route_table" "selected" {
   subnet_id = sort(data.aws_subnet_ids.selected[0].ids)[count.index]
 }
 
-# Create VPC Endpoints For Session Manager 
+# Create VPC Endpoints For Session Manager
 resource "aws_security_group" "ssm_sg" {
   count       = var.vpc_endpoints_enabled ? 1 : 0
   name        = "ssm-sg"
@@ -92,7 +92,7 @@ resource "aws_vpc_endpoint" "s3" {
   tags         = var.tags
 }
 
-# Associate S3 Gateway Endpoint to VPC and Subnets 
+# Associate S3 Gateway Endpoint to VPC and Subnets
 resource "aws_vpc_endpoint_route_table_association" "private_s3_route" {
   count           = var.vpc_endpoints_enabled && var.enable_log_to_s3 ? 1 : 0
   vpc_endpoint_id = aws_vpc_endpoint.s3[0].id
