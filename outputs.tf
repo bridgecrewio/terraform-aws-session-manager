@@ -29,7 +29,7 @@ output "iam_role_arn" {
 }
 
 output "iam_profile_name" {
-  description = "Security Group used to access VPC Endpoints"
+  description = "EC2 instance profile for SSM"
   value       = aws_iam_instance_profile.ssm_profile.name
 }
 
