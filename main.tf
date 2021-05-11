@@ -2,8 +2,10 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
+data "aws_partition" "current" {}
+
 resource "aws_s3_bucket" "session_logs_bucket" {
-  bucket        = var.bucket_name
+  bucket_prefix        = "${var.bucket_name}-"
   acl           = "private"
   force_destroy = true
   tags          = var.tags
@@ -52,7 +54,7 @@ resource "aws_s3_bucket_public_access_block" "session_logs_bucket" {
 
 
 resource "aws_s3_bucket" "access_log_bucket" {
-  bucket        = var.access_log_bucket_name
+  bucket_prefix        = "${var.access_log_bucket_name}-"
   acl           = "log-delivery-write"
   force_destroy = true
 
@@ -94,7 +96,7 @@ data "aws_iam_policy_document" "kms_access" {
     sid = "KMS Key Default"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      identifiers = ["arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
     actions = [
       "kms:*",
@@ -133,12 +135,12 @@ resource "aws_kms_key" "ssmkey" {
 }
 
 resource "aws_kms_alias" "ssmkey" {
-  name          = var.kms_key_alias
+  name_prefix          = "${var.kms_key_alias}-"
   target_key_id = aws_kms_key.ssmkey.key_id
 }
 
 resource "aws_cloudwatch_log_group" "session_manager_log_group" {
-  name              = var.cloudwatch_log_group_name
+  name_prefix              = "${var.cloudwatch_log_group_name}-"
   retention_in_days = var.cloudwatch_logs_retention
   kms_key_id        = aws_kms_key.ssmkey.arn
 
@@ -159,7 +161,7 @@ resource "aws_ssm_document" "session_manager_prefs" {
     "inputs": {
         "s3BucketName": "${var.enable_log_to_s3 ? aws_s3_bucket.session_logs_bucket.id : ""}",
         "s3EncryptionEnabled": ${var.enable_log_to_s3 ? "true" : "false"},
-        "cloudWatchLogGroupName": "${var.enable_log_to_cloudwatch ? var.cloudwatch_log_group_name : ""}",
+        "cloudWatchLogGroupName": "${var.enable_log_to_cloudwatch ? aws_cloudwatch_log_group.session_manager_log_group.name : ""}",
         "cloudWatchEncryptionEnabled": ${var.enable_log_to_cloudwatch ? "true" : "false"},
         "kmsKeyId": "${aws_kms_key.ssmkey.key_id}"
     }
@@ -170,9 +172,9 @@ DOC
 #"kmsKeyId": "${aws_kms_key.ssmkey.key_id}",
 #"kmsKeyId": "${aws_kms_key.ssmkey.arn}",
 
-# Create EC2 Instance Role 
+# Create EC2 Instance Role
 resource "aws_iam_role" "ssm_role" {
-  name = "ssm_role"
+  name_prefix = "ssm_role-"
   path = "/"
   tags = var.tags
 
@@ -194,7 +196,7 @@ EOF
 }
 
 data "aws_iam_policy" "AmazonSSMManagedInstanceCore" {
-  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 data "aws_iam_policy_document" "ssm_s3_cwl_access" {
@@ -259,7 +261,7 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
 }
 
 resource "aws_iam_policy" "ssm_s3_cwl_access" {
-  name   = "ssm_s3_cwl_access"
+  name_prefix   = "ssm_s3_cwl_access-"
   path   = "/"
   policy = data.aws_iam_policy_document.ssm_s3_cwl_access.json
 }
@@ -275,7 +277,7 @@ resource "aws_iam_role_policy_attachment" "SSM-s3-cwl-policy-attach" {
 }
 
 resource "aws_iam_instance_profile" "ssm_profile" {
-  name = "ssm_profile"
+  name_prefix = "ssm_profile-"
   role = aws_iam_role.ssm_role.name
 }
 
