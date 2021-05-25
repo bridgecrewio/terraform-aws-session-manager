@@ -7,7 +7,7 @@ output "access_log_bucket_name" {
 }
 
 output "cloudwatch_log_group_arn" {
-  value = aws_cloudwatch_log_group.session_manager_log_group.arn
+  value = aws_cloudwatch_log_group.session_manager_log_group.*.arn
 }
 
 output "kms_key_arn" {
