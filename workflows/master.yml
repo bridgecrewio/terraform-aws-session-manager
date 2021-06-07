@@ -1,0 +1,60 @@
+---
+# yamllint disable rule:line-length
+name: Verify and Bump
+on:
+  push:
+    branches:
+      - master
+env:
+  terraform: 0.14.5
+  tf_target_dir: .
+  branch: master
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.branch }}
+          token: ${{ github.token }}
+      - name: Terraform Init
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.terraform }}
+          tf_actions_subcommand: init
+          tf_actions_working_dir: ${{ env.tf_target_dir }}
+      - name: Terraform Validate
+        uses: hashicorp/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.terraform }}
+          tf_actions_subcommand: validate
+          tf_actions_working_dir: ${{ env.tf_target_dir }}
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.branch }}
+          token: ${{ github.token }}
+
+      - name: Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ${{ env.tf_target_dir }}
+          framework: terraform
+          args: "--output cli  --bc-api-key ${{ secrets.BC_API_KEY }}"
+  version:
+    name: versioning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+          WITH_V: "true"
+    needs: [terraform, security]
