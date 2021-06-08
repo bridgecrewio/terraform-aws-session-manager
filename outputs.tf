@@ -27,25 +27,25 @@ output "ssm_security_group" {
 }
 
 output "vpc_endpoint_ssm" {
-  value = "" #aws_vpc_endpoint.ssm.*.id
+  value = aws_vpc_endpoint.ssm.*.id
 }
 
 output "vpc_endpoint_ec2messages" {
-  value = "" #aws_vpc_endpoint.ec2messages.*.id
+  value = aws_vpc_endpoint.ec2messages.*.id
 }
 
 output "vpc_endpoint_ssmmessages" {
-  value = "" #aws_vpc_endpoint.ssmmessages.*.id
+  value = ws_vpc_endpoint.ssmmessages.*.id
 }
 
 output "vpc_endpoint_s3" {
-  value = "" #aws_vpc_endpoint.s3.*.id
+  value = aws_vpc_endpoint.s3.*.id
 }
 
 output "vpc_endpoint_logs" {
-  value = "" #aws_vpc_endpoint.logs.*.id
+  value = aws_vpc_endpoint.logs.*.id
 }
 
 output "vpc_endpoint_kms" {
-  value = "" #aws_vpc_endpoint.kms.*.id
+  value = aws_vpc_endpoint.kms.*.id
 }
