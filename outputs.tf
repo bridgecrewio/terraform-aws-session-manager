@@ -35,7 +35,7 @@ output "vpc_endpoint_ec2messages" {
 }
 
 output "vpc_endpoint_ssmmessages" {
-  value = ws_vpc_endpoint.ssmmessages.*.id
+  value = aws_vpc_endpoint.ssmmessages.*.id
 }
 
 output "vpc_endpoint_s3" {
