@@ -8,11 +8,6 @@ data "aws_subnet_ids" "selected" {
   vpc_id = var.vpc_id
 }
 
-locals {
-  subnet_ids_string = var.vpc_endpoints_enabled ? join(",", data.aws_subnet_ids.selected[0].ids) : ""
-  subnet_ids_list   = split(",", local.subnet_ids_string)
-}
-
 data "aws_route_table" "selected" {
   count     = var.vpc_endpoints_enabled ? length(data.aws_subnet_ids.selected[0].ids) : 0
   subnet_id = sort(data.aws_subnet_ids.selected[0].ids)[count.index]
