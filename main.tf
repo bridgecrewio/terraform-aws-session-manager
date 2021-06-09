@@ -2,6 +2,7 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
+data "aws_partition" "current" {}
 resource "aws_kms_key" "ssmkey" {
   description             = "SSM Key"
   deletion_window_in_days = var.kms_key_deletion_window
@@ -11,12 +12,12 @@ resource "aws_kms_key" "ssmkey" {
 }
 
 resource "aws_kms_alias" "ssmkey" {
-  name          = var.kms_key_alias
+  name_prefix   = "${var.kms_key_alias}-"
   target_key_id = aws_kms_key.ssmkey.key_id
 }
 
 resource "aws_cloudwatch_log_group" "session_manager_log_group" {
-  name              = var.cloudwatch_log_group_name
+  name_prefix       = "${var.cloudwatch_log_group_name}-"
   retention_in_days = var.cloudwatch_logs_retention
   kms_key_id        = aws_kms_key.ssmkey.arn
 
@@ -37,7 +38,7 @@ resource "aws_ssm_document" "session_manager_prefs" {
     "inputs": {
         "s3BucketName": "${var.enable_log_to_s3 ? aws_s3_bucket.session_logs_bucket.id : ""}",
         "s3EncryptionEnabled": ${var.enable_log_to_s3 ? "true" : "false"},
-        "cloudWatchLogGroupName": "${var.enable_log_to_cloudwatch ? var.cloudwatch_log_group_name : ""}",
+        "cloudWatchLogGroupName": "${var.enable_log_to_cloudwatch ? aws_cloudwatch_log_group.session_manager_log_group.name : ""}",
         "cloudWatchEncryptionEnabled": ${var.enable_log_to_cloudwatch ? "true" : "false"},
         "kmsKeyId": "${aws_kms_key.ssmkey.key_id}"
     }

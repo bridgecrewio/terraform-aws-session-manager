@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "kms_access" {
     sid = "KMS Key Default"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      identifiers = ["arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
     actions = [
       "kms:*",
@@ -41,9 +41,9 @@ data "aws_iam_policy_document" "kms_access" {
 
 # Create EC2 Instance Role
 resource "aws_iam_role" "ssm_role" {
-  name = "ssm_role"
-  path = "/"
-  tags = var.tags
+  name_prefix = "ssm_role-"
+  path        = "/"
+  tags        = var.tags
 
   assume_role_policy = <<EOF
 {
@@ -63,7 +63,7 @@ EOF
 }
 
 data "aws_iam_policy" "AmazonSSMManagedInstanceCore" {
-  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 data "aws_iam_policy_document" "ssm_s3_cwl_access" {
@@ -129,9 +129,9 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
 }
 
 resource "aws_iam_policy" "ssm_s3_cwl_access" {
-  name   = "ssm_s3_cwl_access"
-  path   = "/"
-  policy = data.aws_iam_policy_document.ssm_s3_cwl_access.json
+  name_prefix = "ssm_s3_cwl_access-"
+  path        = "/"
+  policy      = data.aws_iam_policy_document.ssm_s3_cwl_access.json
 }
 
 resource "aws_iam_role_policy_attachment" "SSM-role-policy-attach" {
@@ -145,6 +145,6 @@ resource "aws_iam_role_policy_attachment" "SSM-s3-cwl-policy-attach" {
 }
 
 resource "aws_iam_instance_profile" "ssm_profile" {
-  name = "ssm_profile"
-  role = aws_iam_role.ssm_role.name
+  name_prefix = "ssm_profile-"
+  role        = aws_iam_role.ssm_role.name
 }

@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "access_log_bucket" {
   # checkov:skip=CKV_AWS_144: Cross region replication is overkill
   # checkov:skip=CKV_AWS_18:
   # checkov:skip=CKV_AWS_52:
-  bucket        = var.access_log_bucket_name
+  bucket_prefix = "${var.access_log_bucket_name}-"
   acl           = "log-delivery-write"
   force_destroy = true
 

@@ -1,5 +1,5 @@
 variable "bucket_name" {
-  description = "Name of S3 bucket to store session logs"
+  description = "Name prefix of S3 bucket to store session logs"
   type        = string
 }
 
@@ -16,7 +16,7 @@ variable "log_expire_days" {
 }
 
 variable "access_log_bucket_name" {
-  description = "Name of S3 bucket to store access logs from session logs bucket"
+  description = "Name prefix of S3 bucket to store access logs from session logs bucket"
   type        = string
 }
 
@@ -33,7 +33,7 @@ variable "kms_key_deletion_window" {
 }
 
 variable "kms_key_alias" {
-  description = "Alias of the KMS key.  Must start with alias/ followed by a name"
+  description = "Alias prefix of the KMS key.  Must start with alias/ followed by a name"
   type        = string
   default     = "alias/ssm-key"
 }

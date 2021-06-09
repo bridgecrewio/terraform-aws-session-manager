@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "session_logs_bucket" {
   # checkov:skip=CKV_AWS_144: Cross region replication overkill
   # checkov:skip=CKV_AWS_52:
-  bucket        = var.bucket_name
+  bucket_prefix = "${var.bucket_name}-"
   acl           = "private"
   force_destroy = true
   tags          = var.tags
