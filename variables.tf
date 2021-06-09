@@ -79,4 +79,3 @@ variable "vpc_endpoints_enabled" {
   type        = bool
   default     = false
 }
-
