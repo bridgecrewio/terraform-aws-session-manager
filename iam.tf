@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "kms_access" {
     sid = "CloudWatchLogsEncryption"
     principals {
       type        = "Service"
-      identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
+      identifiers = ["logs.${local.region}.amazonaws.com"]
     }
     actions = [
       "kms:Encrypt*",

@@ -2,6 +2,10 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
+locals {
+  region = var.vpc_endpoints_enabled && var.vpc_id != null ? split(":",data.aws_vpc.selected[0].arn)[3] : data.aws_region.current.name
+}
+
 data "aws_partition" "current" {}
 resource "aws_kms_key" "ssmkey" {
   description             = "SSM Key"
