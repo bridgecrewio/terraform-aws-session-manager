@@ -25,7 +25,7 @@ resource "aws_vpc_endpoint" "ssm" {
     aws_security_group.ssm_sg[0].id
   ]
 
-  private_dns_enabled = true
+  private_dns_enabled = var.vpc_endpoint_private_dns_enabled
   tags                = var.tags
 }
 
@@ -40,7 +40,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
     aws_security_group.ssm_sg[0].id,
   ]
 
-  private_dns_enabled = true
+  private_dns_enabled = var.vpc_endpoint_private_dns_enabled
   tags                = var.tags
 }
 
@@ -55,7 +55,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
     aws_security_group.ssm_sg[0].id,
   ]
 
-  private_dns_enabled = true
+  private_dns_enabled = var.vpc_endpoint_private_dns_enabled
   tags                = var.tags
 }
 
@@ -80,7 +80,6 @@ resource "aws_vpc_endpoint_route_table_association" "private_s3_subnet_route" {
   route_table_id  = data.aws_route_table.selected[count.index].id
 }
 
-
 # To write session logs to CloudWatch, a CloudWatch endpoint is needed
 resource "aws_vpc_endpoint" "logs" {
   count             = var.vpc_endpoints_enabled && var.enable_log_to_cloudwatch ? 1 : 0
@@ -93,7 +92,7 @@ resource "aws_vpc_endpoint" "logs" {
     aws_security_group.ssm_sg[0].id
   ]
 
-  private_dns_enabled = true
+  private_dns_enabled = var.vpc_endpoint_private_dns_enabled
   tags                = var.tags
 }
 
@@ -109,6 +108,6 @@ resource "aws_vpc_endpoint" "kms" {
     aws_security_group.ssm_sg[0].id
   ]
 
-  private_dns_enabled = true
+  private_dns_enabled = var.vpc_endpoint_private_dns_enabled
   tags                = var.tags
 }

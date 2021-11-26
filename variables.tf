@@ -68,6 +68,12 @@ variable "subnet_ids" {
   default     = []
 }
 
+variable "vpc_endpoint_private_dns_enabled" {
+  description = "Enable private dns for endpoints"
+  type        = bool
+  default     = true
+}
+
 variable "enable_log_to_s3" {
   description = "Enable Session Manager to Log to S3"
   type        = bool
