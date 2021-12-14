@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "kms_access" {
     sid = "CloudWatchLogsEncryption"
     principals {
       type        = "Service"
-      identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
+      identifiers = ["logs.${local.region}.amazonaws.com"]
     }
     actions = [
       "kms:Encrypt*",
@@ -125,11 +125,10 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
 
     resources = [aws_kms_key.ssmkey.arn]
   }
-
 }
 
 resource "aws_iam_policy" "ssm_s3_cwl_access" {
-  name_prefix = "ssm_s3_cwl_access-"
+  name = "ssm_s3_cwl_access-${local.region}"
   path        = "/"
   policy      = data.aws_iam_policy_document.ssm_s3_cwl_access.json
 }
