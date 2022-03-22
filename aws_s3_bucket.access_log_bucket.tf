@@ -1,30 +1,49 @@
-
 resource "aws_s3_bucket" "access_log_bucket" {
   # checkov:skip=CKV_AWS_144: Cross region replication is overkill
   # checkov:skip=CKV_AWS_18:
   # checkov:skip=CKV_AWS_52:
   bucket_prefix = "${var.access_log_bucket_name}-"
-  acl           = "log-delivery-write"
   force_destroy = true
 
   tags = var.tags
 
-  versioning {
-    enabled = true
-  }
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.ssmkey.arn
-        sse_algorithm     = "aws:kms"
-      }
+}
+
+resource "aws_s3_bucket_acl" "access_log_bucket" {
+  bucket = aws_s3_bucket.access_log_bucket.id
+
+  acl = "log-delivery-write"
+}
+
+
+resource "aws_s3_bucket_versioning" "access_log_bucket" {
+  bucket = aws_s3_bucket.access_log_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "access_log_bucket" {
+  bucket = aws_s3_bucket.access_log_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.ssmkey.arn
+      sse_algorithm     = "aws:kms"
     }
   }
+}
 
-  lifecycle_rule {
-    id      = "delete_after_X_days"
-    enabled = true
+
+resource "aws_s3_bucket_lifecycle_configuration" "access_log_bucket" {
+  bucket = aws_s3_bucket.access_log_bucket.id
+
+  rule {
+    id     = "delete_after_X_days"
+    status = "Enabled"
 
     expiration {
       days = var.access_log_expire_days
