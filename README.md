@@ -18,6 +18,7 @@ module "ssm" {
   access_log_bucket_name    = "my-session-access-logs"
   enable_log_to_s3          = true
   enable_log_to_cloudwatch  = true
+  linux_shell_profile       = "date"
 }
 ```
 
@@ -117,6 +118,7 @@ No modules.
 | <a name="input_enable_log_to_s3"></a> [enable\_log\_to\_s3](#input\_enable\_log\_to\_s3) | Enable Session Manager to Log to S3 | `bool` | `true` | no |
 | <a name="input_kms_key_alias"></a> [kms\_key\_alias](#input\_kms\_key\_alias) | Alias prefix of the KMS key.  Must start with alias/ followed by a name | `string` | `"alias/ssm-key"` | no |
 | <a name="input_kms_key_deletion_window"></a> [kms\_key\_deletion\_window](#input\_kms\_key\_deletion\_window) | Waiting period for scheduled KMS Key deletion.  Can be 7-30 days. | `number` | `7` | no |
+| <a name="input_linux_shell_profile"></a> [linux\_shell\_profile](#input\_linux\_shell\_profile) | The ShellProfile to use for linux based machines. | `string` | `""` | no |
 | <a name="input_log_archive_days"></a> [log\_archive\_days](#input\_log\_archive\_days) | Number of days to wait before archiving to Glacier | `number` | `30` | no |
 | <a name="input_log_expire_days"></a> [log\_expire\_days](#input\_log\_expire\_days) | Number of days to wait before deleting | `number` | `365` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnet Ids to deploy endpoints into | `set(string)` | `[]` | no |
@@ -124,6 +126,7 @@ No modules.
 | <a name="input_vpc_endpoint_private_dns_enabled"></a> [vpc\_endpoint\_private\_dns\_enabled](#input\_vpc\_endpoint\_private\_dns\_enabled) | Enable private dns for endpoints | `bool` | `true` | no |
 | <a name="input_vpc_endpoints_enabled"></a> [vpc\_endpoints\_enabled](#input\_vpc\_endpoints\_enabled) | Create VPC Endpoints | `bool` | `false` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID to deploy endpoints into | `string` | `null` | no |
+| <a name="input_windows_shell_profile"></a> [windows\_shell\_profile](#input\_windows\_shell\_profile) | The ShellProfile to use for windows based machines. | `string` | `""` | no |
 
 ## Outputs
 

@@ -91,3 +91,15 @@ variable "vpc_endpoints_enabled" {
   type        = bool
   default     = false
 }
+
+variable "linux_shell_profile" {
+  description = "The ShellProfile to use for linux based machines."
+  default     = ""
+  type        = string
+}
+
+variable "windows_shell_profile" {
+  description = "The ShellProfile to use for windows based machines."
+  default     = ""
+  type        = string
+}
