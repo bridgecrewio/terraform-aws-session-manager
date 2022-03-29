@@ -3,3 +3,4 @@
 *.tfvars*
 .terraform.lock.hcl
 .DS_Store
+twistcli
