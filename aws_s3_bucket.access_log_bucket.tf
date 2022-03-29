@@ -2,6 +2,7 @@ resource "aws_s3_bucket" "access_log_bucket" {
   # checkov:skip=CKV_AWS_144: Cross region replication is overkill
   # checkov:skip=CKV_AWS_18:
   # checkov:skip=CKV_AWS_52:
+  # checkov:skip=CKV_AWS_145:v4 provider legacy
   bucket_prefix = "${var.access_log_bucket_name}-"
   force_destroy = true
 

@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "session_logs_bucket" {
   # checkov:skip=CKV_AWS_144: Cross region replication overkill
   # checkov:skip=CKV_AWS_52:
+  # checkov:skip=CKV_AWS_145:v4 provider legacy
   bucket_prefix = "${var.bucket_name}-"
   force_destroy = true
   tags          = var.tags

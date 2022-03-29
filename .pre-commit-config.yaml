@@ -3,8 +3,8 @@
 default_language_version:
   python: python3.8
 repos:
-  - repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
     hooks:
       - id: check-json
       - id: check-merge-conflict
@@ -19,22 +19,22 @@ repos:
         args:
           - --allow-missing-credentials
       - id: detect-private-key
-  - repo: git://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.1.10
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.13
     hooks:
       - id: forbid-tabs
         exclude_types: [python, javascript, dtd, markdown, makefile, xml]
         exclude: binary|\.bin$
-  - repo: git://github.com/jameswoolfenden/pre-commit-shell
+  - repo: https://github.com/jameswoolfenden/pre-commit-shell
     rev: 0.0.2
     hooks:
       - id: shell-lint
         exclude: template|\.template$
-  - repo: git://github.com/igorshubovych/markdownlint-cli
-    rev: v0.30.0
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.31.1
     hooks:
       - id: markdownlint
-  - repo: git://github.com/adrienverge/yamllint
+  - repo: https://github.com/adrienverge/yamllint
     rev: v1.26.3
     hooks:
       - id: yamllint
@@ -43,15 +43,15 @@ repos:
         entry: yamllint
         language: python
         types: [file, yaml]
-  - repo: git://github.com/jameswoolfenden/pre-commit
+  - repo: https://github.com/jameswoolfenden/pre-commit
     rev: v0.1.46
     hooks:
       - id: terraform-fmt
         language_version: python3.8
       - id: tf2docs
         language_version: python3.8
-  - repo: git://github.com/bridgecrewio/checkov
-    rev: 2.0.659
+  - repo: https://github.com/bridgecrewio/checkov
+    rev: 2.0.1005
     hooks:
       - id: checkov
         verbose: true
