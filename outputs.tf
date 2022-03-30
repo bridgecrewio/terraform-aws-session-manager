@@ -77,4 +77,3 @@ output "vpc_endpoint_kms" {
   description = "VPC Endpoint for KMS"
   value       = aws_vpc_endpoint.kms.*.id
 }
-

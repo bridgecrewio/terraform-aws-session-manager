@@ -286,4 +286,3 @@ resource "aws_iam_instance_profile" "ssm_profile" {
   name = "ssm_profile_${data.aws_region.current.name}"
   role = aws_iam_role.ssm_role.name
 }
-
