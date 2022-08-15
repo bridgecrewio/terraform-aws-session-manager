@@ -1,18 +1,3 @@
-locals {
-  region  = var.vpc_endpoints_enabled && var.vpc_id != null ? split(":", data.aws_vpc.selected[0].arn)[3] : data.aws_region.current.name
-  subnets = var.vpc_endpoints_enabled ? var.subnet_ids != [] ? var.subnet_ids : data.aws_subnet_ids.selected[0].ids : []
-}
-
-data "aws_subnet_ids" "selected" {
-  count  = var.vpc_endpoints_enabled ? 1 : 0
-  vpc_id = var.vpc_id
-}
-
-data "aws_route_table" "selected" {
-  count     = var.vpc_endpoints_enabled ? length(local.subnets) : 0
-  subnet_id = sort(local.subnets)[count.index]
-}
-
 # SSM, EC2Messages, and SSMMessages endpoints are required for Session Manager
 resource "aws_vpc_endpoint" "ssm" {
   count             = var.vpc_endpoints_enabled ? 1 : 0

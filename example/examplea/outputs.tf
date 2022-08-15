@@ -2,8 +2,8 @@ output "session_logs_bucket_name" {
   value = module.ssm.session_logs_bucket_name
 }
 
-output "access_log_bucket_name" {
-  value = module.ssm.access_log_bucket_name
+output "access_logs_bucket_name" {
+  value = module.ssm.access_logs_bucket_name
 }
 
 output "cloudwatch_log_group_arn" {

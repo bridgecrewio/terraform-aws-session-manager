@@ -1,6 +1,7 @@
 variable "bucket_name" {
   description = "Name prefix of S3 bucket to store session logs"
   type        = string
+  default     = "ssm-session-logs"
 }
 
 variable "log_archive_days" {
@@ -15,9 +16,10 @@ variable "log_expire_days" {
   default     = 365
 }
 
-variable "access_log_bucket_name" {
+variable "access_logs_bucket_name" {
   description = "Name prefix of S3 bucket to store access logs from session logs bucket"
   type        = string
+  default     = "ssm-session-access-logs"
 }
 
 variable "access_log_expire_days" {
@@ -27,13 +29,13 @@ variable "access_log_expire_days" {
 }
 
 variable "kms_key_deletion_window" {
-  description = "Waiting period for scheduled KMS Key deletion.  Can be 7-30 days."
+  description = "Number of days to wait for scheduled KMS Key deletion [7-30]"
   type        = number
   default     = 7
 }
 
 variable "kms_key_alias" {
-  description = "Alias prefix of the KMS key.  Must start with alias/ followed by a name"
+  description = "Alias prefix of the KMS key. Must start with alias/ followed by a name"
   type        = string
   default     = "alias/ssm-key"
 }
@@ -93,13 +95,13 @@ variable "vpc_endpoints_enabled" {
 }
 
 variable "linux_shell_profile" {
-  description = "The ShellProfile to use for linux based machines."
+  description = "The ShellProfile to use for Linux based machines"
   default     = ""
   type        = string
 }
 
 variable "windows_shell_profile" {
-  description = "The ShellProfile to use for windows based machines."
+  description = "The ShellProfile to use for Windows based machines"
   default     = ""
   type        = string
 }
