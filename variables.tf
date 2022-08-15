@@ -4,6 +4,12 @@ variable "bucket_name" {
   default     = "ssm-session-logs"
 }
 
+variable "bucket_key_prefix" {
+  description = "Name of S3 sub-folder (prefix)"
+  type        = string
+  default     = ""
+}
+
 variable "log_archive_days" {
   description = "Number of days to wait before archiving to Glacier"
   type        = number
@@ -52,28 +58,34 @@ variable "cloudwatch_log_group_name" {
   default     = "/ssm/session-logs"
 }
 
-variable "tags" {
-  description = "A map of tags to add to all resources"
-  type        = map(string)
-  default     = {}
+variable "idle_session_timeout" {
+  description = "Number of minutes a user can be inactive before a session ends [1-60]"
+  type        = number
+  default     = 20
 }
 
-variable "vpc_id" {
-  description = "VPC ID to deploy endpoints into"
+variable "max_session_duration" {
+  description = "Number of minutes before a session ends (default: infinite) [1-1440]"
+  type        = number
+  default     = -1
+}
+
+variable "run_as_default_user" {
+  description = "OS default user name, if IAM user/role 'SSMSessionRunAs' tag is undefined"
   type        = string
-  default     = null
+  default     = "ssm-user"
 }
 
-variable "subnet_ids" {
-  description = "Subnet Ids to deploy endpoints into"
-  type        = set(string)
-  default     = []
+variable "linux_shell_profile" {
+  description = "The ShellProfile to use for Linux based machines"
+  default     = ""
+  type        = string
 }
 
-variable "vpc_endpoint_private_dns_enabled" {
-  description = "Enable private dns for endpoints"
-  type        = bool
-  default     = true
+variable "windows_shell_profile" {
+  description = "The ShellProfile to use for Windows based machines"
+  default     = ""
+  type        = string
 }
 
 variable "enable_log_to_s3" {
@@ -88,20 +100,39 @@ variable "enable_log_to_cloudwatch" {
   default     = true
 }
 
+variable "enable_run_as" {
+  description = "Enable Run As support for Linux instances"
+  type        = bool
+  default     = false
+}
+
+variable "vpc_endpoint_private_dns_enabled" {
+  description = "Enable private dns for endpoints"
+  type        = bool
+  default     = true
+}
+
 variable "vpc_endpoints_enabled" {
   description = "Create VPC Endpoints"
   type        = bool
   default     = false
 }
 
-variable "linux_shell_profile" {
-  description = "The ShellProfile to use for Linux based machines"
-  default     = ""
+variable "vpc_id" {
+  description = "VPC ID to deploy endpoints into"
   type        = string
+  default     = null
 }
 
-variable "windows_shell_profile" {
-  description = "The ShellProfile to use for Windows based machines"
-  default     = ""
-  type        = string
+variable "subnet_ids" {
+  description = "Subnet Ids to deploy endpoints into"
+  type        = set(string)
+  default     = []
 }
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+

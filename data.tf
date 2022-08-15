@@ -26,4 +26,3 @@ data "aws_route_table" "selected" {
   count     = var.vpc_endpoints_enabled ? length(local.subnets) : 0
   subnet_id = sort(local.subnets)[count.index]
 }
-

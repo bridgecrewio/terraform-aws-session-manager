@@ -25,6 +25,7 @@ resource "aws_ssm_document" "session_manager_prefs" {
   document_format = "JSON"
   tags            = var.tags
 
+  # https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-schema.html
   # https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-configure-preferences-cli.html
   content = jsonencode({
     schemaVersion = "1.0"
@@ -32,13 +33,19 @@ resource "aws_ssm_document" "session_manager_prefs" {
     sessionType   = "Standard_Stream"
     inputs = {
       s3BucketName                = var.enable_log_to_s3 ? aws_s3_bucket.session_logs_bucket[0].id : ""
-      s3EncryptionEnabled         = var.enable_log_to_s3 ? "true" : "false"
+      s3KeyPrefix                 = var.enable_log_to_s3 ? var.bucket_key_prefix : ""
+      s3EncryptionEnabled         = var.enable_log_to_s3
       cloudWatchLogGroupName      = var.enable_log_to_cloudwatch ? aws_cloudwatch_log_group.session_manager_log_group[0].name : ""
-      cloudWatchEncryptionEnabled = var.enable_log_to_cloudwatch ? "true" : "false"
+      cloudWatchEncryptionEnabled = var.enable_log_to_cloudwatch
+      cloudWatchStreamingEnabled  = var.enable_log_to_cloudwatch
       kmsKeyId                    = aws_kms_key.ssmkey.key_id
+      runAsEnabled                = var.enable_run_as
+      runAsDefaultUser            = var.enable_run_as ? var.run_as_default_user : ""
+      idleSessionTimeout          = var.idle_session_timeout
+      maxSessionDuration          = var.max_session_duration != -1 ? var.max_session_duration : ""
       shellProfile = {
-        linux   = var.linux_shell_profile == "" ? var.linux_shell_profile : ""
-        windows = var.windows_shell_profile == "" ? var.windows_shell_profile : ""
+        linux   = var.linux_shell_profile
+        windows = var.windows_shell_profile
       }
     }
   })

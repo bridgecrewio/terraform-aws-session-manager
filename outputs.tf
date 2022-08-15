@@ -18,6 +18,11 @@ output "kms_key_arn" {
   value       = aws_kms_key.ssmkey.arn
 }
 
+output "iam_policy_arn" {
+  description = "IAM Policy for EC2 instances with access to SSM resources"
+  value       = aws_iam_policy.ssm_s3_cwl_kms_access.arn
+}
+
 output "iam_role_arn" {
   description = "IAM Role assumable by EC2 instances with access to SSM resources"
   value       = aws_iam_role.ssm_role.arn
@@ -26,6 +31,16 @@ output "iam_role_arn" {
 output "iam_profile_name" {
   description = "EC2 instance profile for SSM"
   value       = aws_iam_instance_profile.ssm_profile.name
+}
+
+output "document_name" {
+  description = "Name of the created document"
+  value       = aws_ssm_document.session_manager_prefs.name
+}
+
+output "document_arn" {
+  description = "ARN of the created document. This can be used to create IAM policies that prevent changes to session manager preferences"
+  value       = aws_ssm_document.session_manager_prefs.arn
 }
 
 output "ssm_security_group" {
