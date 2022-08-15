@@ -1,51 +1,79 @@
 output "session_logs_bucket_name" {
-  value = aws_s3_bucket.session_logs_bucket.id
+  description = "S3 bucket for session logs"
+  value       = aws_s3_bucket.session_logs_bucket[0].id
 }
 
-output "access_log_bucket_name" {
-  value = aws_s3_bucket.access_log_bucket.id
+output "access_logs_bucket_name" {
+  description = "S3 bucket for S3 access logs"
+  value       = aws_s3_bucket.access_logs_bucket[0].id
 }
 
 output "cloudwatch_log_group_arn" {
-  value = aws_cloudwatch_log_group.session_manager_log_group.arn
+  description = "CloudWatch Log group for session logs"
+  value       = aws_cloudwatch_log_group.session_manager_log_group[0].arn
 }
 
 output "kms_key_arn" {
-  value = aws_kms_key.ssmkey.arn
+  description = "KMS Key Arn for Encrypting logs and session"
+  value       = aws_kms_key.ssmkey.arn
+}
+
+output "iam_policy_arn" {
+  description = "IAM Policy for EC2 instances with access to SSM resources"
+  value       = aws_iam_policy.ssm_s3_cwl_kms_access.arn
 }
 
 output "iam_role_arn" {
-  value = aws_iam_role.ssm_role.arn
+  description = "IAM Role assumable by EC2 instances with access to SSM resources"
+  value       = aws_iam_role.ssm_role.arn
 }
 
 output "iam_profile_name" {
-  value = aws_iam_instance_profile.ssm_profile.name
+  description = "EC2 instance profile for SSM"
+  value       = aws_iam_instance_profile.ssm_profile.name
+}
+
+output "document_name" {
+  description = "Name of the created document"
+  value       = aws_ssm_document.session_manager_prefs.name
+}
+
+output "document_arn" {
+  description = "ARN of the created document. This can be used to create IAM policies that prevent changes to session manager preferences"
+  value       = aws_ssm_document.session_manager_prefs.arn
 }
 
 output "ssm_security_group" {
-  value = aws_security_group.ssm_sg.*.id
+  description = "Security Group used to access VPC Endpoints"
+  value       = aws_security_group.ssm_sg.*.id
 }
 
 output "vpc_endpoint_ssm" {
-  value = aws_vpc_endpoint.ssm.*.id
+  description = "VPC Endpoint for SSM"
+  value       = aws_vpc_endpoint.ssm.*.id
 }
 
 output "vpc_endpoint_ec2messages" {
-  value = aws_vpc_endpoint.ec2messages.*.id
+  description = "VPC Endpoint for EC2 Messages"
+  value       = aws_vpc_endpoint.ec2messages.*.id
 }
 
 output "vpc_endpoint_ssmmessages" {
-  value = aws_vpc_endpoint.ssmmessages.*.id
+  description = "VPC Endpoint for SSM Messages"
+  value       = aws_vpc_endpoint.ssmmessages.*.id
 }
 
 output "vpc_endpoint_s3" {
-  value = aws_vpc_endpoint.s3.*.id
+  description = "VPC Endpoint for S3"
+  value       = aws_vpc_endpoint.s3.*.id
 }
 
 output "vpc_endpoint_logs" {
-  value = aws_vpc_endpoint.logs.*.id
+  description = "VPC Endpoint for CloudWatch Logs"
+  value       = aws_vpc_endpoint.logs.*.id
 }
 
 output "vpc_endpoint_kms" {
-  value = aws_vpc_endpoint.kms.*.id
+  description = "VPC Endpoint for KMS"
+  value       = aws_vpc_endpoint.kms.*.id
 }
