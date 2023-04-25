@@ -80,7 +80,6 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
       "s3:PutObjectVersionAcl",
     ]
 
-    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       aws_s3_bucket.session_logs_bucket.arn,
       "${aws_s3_bucket.session_logs_bucket.arn}/*",
@@ -105,7 +104,6 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
       "logs:DescribeLogGroups",
       "logs:DescribeLogStreams",
     ]
-    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = ["*"]
   }
 
@@ -122,6 +120,7 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
     resources = [aws_kms_key.ssmkey.arn]
   }
 
+  #tfsec:ignore:aws-iam-no-policy-wildcards
   statement {
     sid = "CWlogsSSM"
     actions = [
@@ -131,7 +130,6 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
       "ssmmessages:OpenDataChannel",
       "ssm:UpdateInstanceInformation",
     ]
-    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = ["*"]
   }
 
