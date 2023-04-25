@@ -70,6 +70,7 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
   # checkov:skip=CKV_AWS_111: ADD REASON
   # A custom policy for S3 bucket access
   # https://docs.aws.amazon.com/en_us/systems-manager/latest/userguide/setup-instance-profile.html#instance-profile-custom-s3-policy
+  #tfsec:ignore:aws-iam-no-policy-wildcards
   statement {
     sid = "S3BucketAccessForSessionManager"
 
@@ -79,6 +80,7 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
       "s3:PutObjectVersionAcl",
     ]
 
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       aws_s3_bucket.session_logs_bucket.arn,
       "${aws_s3_bucket.session_logs_bucket.arn}/*",
@@ -86,20 +88,14 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
   }
 
   statement {
-    sid = "S3EncryptionForSessionManager"
-
-    actions = [
-      "s3:GetEncryptionConfiguration",
-    ]
-
-    resources = [
-      aws_s3_bucket.session_logs_bucket.arn
-    ]
+    sid       = "S3EncryptionForSessionManager"
+    actions   = ["s3:GetEncryptionConfiguration"]
+    resources = [aws_s3_bucket.session_logs_bucket.arn]
   }
-
 
   # A custom policy for CloudWatch Logs access
   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/permissions-reference-cwl.html
+  #tfsec:ignore:aws-iam-no-policy-wildcards
   statement {
     sid = "CloudWatchLogsAccessForSessionManager"
 
@@ -109,7 +105,7 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
       "logs:DescribeLogGroups",
       "logs:DescribeLogStreams",
     ]
-
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = ["*"]
   }
 
@@ -125,6 +121,20 @@ data "aws_iam_policy_document" "ssm_s3_cwl_access" {
 
     resources = [aws_kms_key.ssmkey.arn]
   }
+
+  statement {
+    sid = "CWlogsSSM"
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel",
+      "ssm:UpdateInstanceInformation",
+    ]
+    #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"]
+  }
+
 }
 
 resource "aws_iam_policy" "ssm_s3_cwl_access" {

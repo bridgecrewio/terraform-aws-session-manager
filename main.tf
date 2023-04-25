@@ -3,6 +3,7 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 data "aws_partition" "current" {}
+
 resource "aws_kms_key" "ssmkey" {
   description             = "SSM Key"
   deletion_window_in_days = var.kms_key_deletion_window
@@ -17,7 +18,8 @@ resource "aws_kms_alias" "ssmkey" {
 }
 
 resource "aws_cloudwatch_log_group" "session_manager_log_group" {
-  name_prefix       = "${var.cloudwatch_log_group_name}-"
+  #name_prefix       = "${var.cloudwatch_log_group_name}-"
+  name              = var.cloudwatch_log_group_name
   retention_in_days = var.cloudwatch_logs_retention
   kms_key_id        = aws_kms_key.ssmkey.arn
 
@@ -34,16 +36,38 @@ resource "aws_ssm_document" "session_manager_prefs" {
     schemaVersion = "1.0"
     description   = "Document to hold regional settings for Session Manager"
     sessionType   = "Standard_Stream"
-    inputs = {
+    inputs = var.create_but_not_enable ? {
+      s3BucketName                = ""
+      s3EncryptionEnabled         = false
+      cloudWatchStreamingEnabled  = false
+      cloudWatchLogGroupName      = ""
+      cloudWatchEncryptionEnabled = false
+      kmsKeyId                    = ""
+      shellProfile = {
+        linux   = ""
+        windows = ""
+      }
+      s3KeyPrefix        = ""
+      runAsEnabled       = false
+      runAsDefaultUser   = ""
+      maxSessionDuration = ""
+      idleSessionTimeout = "20"
+      } : {
       s3BucketName                = var.enable_log_to_s3 ? aws_s3_bucket.session_logs_bucket.id : ""
-      s3EncryptionEnabled         = var.enable_log_to_s3 ? "true" : "false"
+      s3EncryptionEnabled         = var.enable_log_to_s3 ? true : false
+      cloudWatchStreamingEnabled  = var.enable_log_to_cloudwatch ? true : false
       cloudWatchLogGroupName      = var.enable_log_to_cloudwatch ? aws_cloudwatch_log_group.session_manager_log_group.name : ""
-      cloudWatchEncryptionEnabled = var.enable_log_to_cloudwatch ? "true" : "false"
-      kmsKeyId                    = aws_kms_key.ssmkey.key_id
+      cloudWatchEncryptionEnabled = var.enable_log_to_cloudwatch ? true : false
+      kmsKeyId                    = var.enable_session_kms_encryption ? aws_kms_key.ssmkey.key_id : ""
       shellProfile = {
         linux   = var.linux_shell_profile == "" ? var.linux_shell_profile : ""
         windows = var.windows_shell_profile == "" ? var.windows_shell_profile : ""
       }
+      s3KeyPrefix        = ""
+      runAsEnabled       = false
+      runAsDefaultUser   = ""
+      maxSessionDuration = ""
+      idleSessionTimeout = "20"
     }
   })
 }

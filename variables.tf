@@ -103,3 +103,15 @@ variable "windows_shell_profile" {
   default     = ""
   type        = string
 }
+
+variable "enable_session_kms_encryption" {
+  description = "Add KMS encryption to the default TLS 1.2 encryption used to protect session data"
+  default     = false
+  type        = bool
+}
+
+variable "create_but_not_enable" {
+  description = "Create all the components but do not enable/enforce logging"
+  default     = false
+  type        = bool
+}

@@ -14,6 +14,10 @@ output "kms_key_arn" {
   value = aws_kms_key.ssmkey.arn
 }
 
+output "iam_policy_arn" {
+  value = aws_iam_policy.ssm_s3_cwl_access.arn
+}
+
 output "iam_role_arn" {
   value = aws_iam_role.ssm_role.arn
 }
@@ -49,3 +53,5 @@ output "vpc_endpoint_logs" {
 output "vpc_endpoint_kms" {
   value = aws_vpc_endpoint.kms.*.id
 }
+
+
