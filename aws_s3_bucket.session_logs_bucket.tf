@@ -58,7 +58,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "session_logs_bucket" {
 resource "aws_s3_bucket_logging" "session_logs_bucket" {
   bucket = aws_s3_bucket.session_logs_bucket.id
 
-  target_bucket = aws_s3_bucket.session_logs_bucket.id
+  target_bucket = aws_s3_bucket.access_log_bucket.id
   target_prefix = "log/"
 }
 
