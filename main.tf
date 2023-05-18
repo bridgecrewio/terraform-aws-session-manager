@@ -43,8 +43,8 @@ resource "aws_ssm_document" "session_manager_prefs" {
       shellProfile = {
       #  linux   = var.linux_shell_profile == "" ? var.linux_shell_profile : ""
       #  windows = var.windows_shell_profile == "" ? var.windows_shell_profile : ""
-        linux   = var.linux_shell_profile 
-        windows = var.windows_shell_profile
+        linux   = var.linux_shell_profile == "" ? "" : var.linux_shell_profile
+        windows = var.windows_shell_profile == "" ? "" : var.windows_shell_profile
       }
     }
   })
