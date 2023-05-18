@@ -41,8 +41,10 @@ resource "aws_ssm_document" "session_manager_prefs" {
       cloudWatchEncryptionEnabled = var.enable_log_to_cloudwatch ? "true" : "false"
       kmsKeyId                    = aws_kms_key.ssmkey.key_id
       shellProfile = {
-        linux   = var.linux_shell_profile == "" ? var.linux_shell_profile : ""
-        windows = var.windows_shell_profile == "" ? var.windows_shell_profile : ""
+      #  linux   = var.linux_shell_profile == "" ? var.linux_shell_profile : ""
+      #  windows = var.windows_shell_profile == "" ? var.windows_shell_profile : ""
+        linux   = var.linux_shell_profile 
+        windows = var.windows_shell_profile
       }
     }
   })
