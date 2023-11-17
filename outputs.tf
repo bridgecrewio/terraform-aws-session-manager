@@ -18,6 +18,10 @@ output "iam_role_arn" {
   value = aws_iam_role.ssm_role.arn
 }
 
+output "iam_policy_arn" {
+  value = aws_iam_policy.ssm_s3_cwl_access.arn
+}
+
 output "iam_profile_name" {
   value = aws_iam_instance_profile.ssm_profile.name
 }
